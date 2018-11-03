@@ -1,0 +1,164 @@
+#trainTable th,
+    td {
+      display: inline-block;
+      width: 16.575%;	  
+    }
+	
+table:empty 
+{display: none}	
+	
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: url("../images/10.jpg");
+	background-repeat: no-repeat;
+    background-size: cover;
+	opacity: 0.5%;
+}
+
+html {
+    font-family: "helvetica neue", sans-serif;
+}
+.nav {
+    border-bottom: 5px solid black;
+    padding-top:1%;
+    padding-bottom:1%;
+    text-align: right;
+    height: 10%;
+    background: white;
+    align-content: center;
+    text-align: center;
+}
+.card {
+    margin-left: 2%;
+	margin-top: 1%;
+    font-size: 14px;
+    width: 98%;
+    border: 5px solid black;
+    background-color: white; 
+}
+#result {
+    align-content: center;
+    text-align: center;
+    width: 80%;
+    font-family: "helvetica neue", sans-serif;
+    font-size: calc(10px + 1vw);
+    font-weight: 400;
+    color: black;
+    margin-left: 10%;
+    margin-top:2%;
+    margin-bottom: 2%;
+    padding: 2%;
+    border: 5px solid black;
+    background-color: #dff0d8;
+   /* display: none; */
+}
+
+.container
+{
+    align-content: center;
+    width: 80%;
+    /* padding-top: 1%; */
+}
+
+.card-body
+{
+    align-content: center;
+    width: 80%;
+    border: black;
+    background: white;
+    width: 100%;
+}
+#mainPanel {
+    align-content: center;
+    width: 80%;
+    font-family: "helvetica neue", sans-serif;
+    font-size: calc(8px + 1vw);
+    font-weight: 300;
+    color: black;
+    margin-left: 10%;
+    margin-top: 3%;
+	background-color: white;
+}
+.ShowTimer
+{
+    align-content: right;
+    text-align: right;
+    font-family: "helvetica neue", sans-serif;
+}
+.ShowQuizz
+{
+    align-content: left;
+    font-family: "helvetica neue", sans-serif;
+    text-align: left;
+}
+.panel-body {
+    align-content: center;
+    height: 70%;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: calc(10px + 1vw);
+    font-weight: 200;
+    color: black;
+    text-align: left;
+    background: white;
+  }
+  .bodyTitle
+  {
+      text-align: center;
+	  align-content: center;
+      padding-bottom:5%;
+      /* font-size: 20px; */
+      font-size: calc(10px + 1vw);
+      font-family: "helvetica neue", sans-serif;
+	  font-weight:bold;
+	  /* font-size:40px; */
+      /* padding: 20px; */
+      color: black;  
+  }  
+
+#QuizzForm {
+    /* check how to use cal here ?? for padding top */
+    padding-top: 3%;
+    /* padding-top: calc(100vw * (5/16)); */
+    /* height: calc(50vw * (9/16)); */
+    margin-left:  10%; 
+	width: 80%;
+	align-content: center;
+    /* background: url("../images/grader.jpg");     */
+  }
+  
+.jumbotron
+{
+	height: 10%;
+}
+  
+
+@media only screen and (max-width: 500px) {
+  
+    #toggle:checked + .menu {
+        display: block;
+    }
+    
+    #mainBody {
+        /* check how to use cal here ?? for padding top */
+        padding-top: 28%;
+        /* padding-top: calc(100vw * (5/16)); */
+        /* height: calc(50vw * (9/16)); */
+        margin-left: 30px;
+        width: 80%;
+      }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

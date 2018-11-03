@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Train Schedular</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="assets\javascript\jquery.dataTables.js"></script>
+
+  <!-- Firebase Reference -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+  <!-- Moment.js Reference -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+  <link rel="stylesheet" href="assets/css/main.css">
+  
+</head>
+
+<body onload="initialize()">
+
+  <!-- Train schedular page container -->
+  <div class="container">
+
+    <!-- Top container title display  style="background-color: darkgrey; color: white;height:5%;"  -->
+    <div class="card border border-dark" >
+      <h1 class="text-center">Train Schedular</h1>   	    	 
+    </div> 
+
+	<!-- <h2><label style="text-align:center;">Train Schedular</label></h2> -->
+    
+	<!-- Show existing Train tables  -->
+	<div class="row">
+      <div class="col-sm-12">
+          <div class="card card-secondary mb-4 border border-dark">
+		  <!-- 
+		  <h5 class="card-header">Train Bulletin<div class="text-right" ></div></h5> -->
+		  
+		  
+		<div class="card-header"><h6>
+        <div class="row">
+          <div class="col-sm-9 text-left">Train Bulletin</div>
+          <div class="col-sm-3 text-right">Current Time:<span id="currentTime"></span></div>
+        </div></h6>		
+		</div>
+          
+          <div class="card-body">		  
+		  <div class="table-responsive-sm">
+            <table class="table table-sm table-hover  " id="trainTable">
+			
+                <thead class="table-active border border-dark"> 
+                <tr>
+                  <th scope="col">Train Name</th>
+                  <th scope="col">Destination</th>				  
+                  <th scope="col">Frequency(mins)</th>
+                  <th scope="col">Next Arrival</th>
+                  <th scope="col">Minutes Away</th>                  
+                </tr>
+              </thead>
+              <tbody id="ttBody">
+              </tbody>
+            </table>
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+	<!-- input form for adding Train  -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card mb-4 border border-dark">
+          <h5 class="card-header">Add Train</h5>
+          <div class="card-body">            
+            <form>										
+				<div class="form-group">
+				<div class="row">
+				<div class="col-sm-4">
+					<label for="traininput">Train Name</label>                
+					<input class="form-control" id="txtTrainName" type="text" placeholder="Train Name">
+				</div>
+				
+				<div class="col-sm-8">
+					<label for="role-input">Destination</label>	               
+					<div id="locationField"><input class="form-control" id="txtDestination" placeholder="Train Destination"  type="text"></input></div>
+				</div>			  
+				</div>
+				</div>
+				<div class="form-group">
+				<div class="row">
+				<div class="col-sm-2">
+					<label for="dropdownMenu1">Select HH</label>
+					<select class="form-control" id="dropdownMenu1"></select>  
+				</div>
+				<div class="col-sm-2">
+					<label for="dropdownMenu2">Select MM</label>
+					<select class="form-control" id="dropdownMenu2"></select>  
+				</div>
+				<div class="col-sm-8">
+				<div class="form-group">
+					<label for="rate-input">Frequency (in minutes)</label>
+					<input class="form-control" id="txtFreq" type="text" placeholder="Frequency (in minutes)">
+				</div>
+				</div>
+				</div></div>
+				                          
+				<div class="row">
+				<div class="col-sm-4"><button type="button"  id="btnAddTrain" class="btn btn-default navbar-btn">Submit</button></div>
+				<div class="col-sm-8"><button type="button"  id="btnClear" class="btn btn-default navbar-btn">Clear Results</button><br></div>
+				<br>
+				</div>            
+			</form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+ </div>
+
+  <!-- JavaScript -->
+  <script src="assets\javascript\TrainSchedular.js"></script>
+
+</body>
+
+</html>
