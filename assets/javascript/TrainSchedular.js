@@ -105,18 +105,36 @@ var tTime = tHH + ":" + tMM;
 		return;
 	}
 
-
-database.ref().push({ 
+	
+	var postData  = {
 		tName: tName,
 		tDestination: tDestination,
 		tTime: tTime,
 		tFrq: tFrq
+	}
+	
+	 var newPostKey = firebase.database().ref().child('train').push().key;
+
+// Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {};
+  updates['/train/' + newPostKey] = postData;
+  clearform();
+  return firebase.database().ref().update(updates);
+	 
+/*
+database.ref().push({ 
+		tName: tName,
+		tDestination: tDestination,
+		tTime: tTime,
+		tFrq: tFrq,
+		tid: database.ref().key
 }).then(function(){    
 		// clear the form
 		clearform();
 }).catch(function(error) {
 		alert("Data could not be saved." + error);
 });
+*/
 
 // end of submit button
 });
@@ -126,6 +144,7 @@ database.ref().push({
 	// display data in the table
 function TrainDisplay()
 {
+	$('#ttBody').empty();
 	// Task Requirement: Users from many different machines must be able to view same train times.
 	// I interpreted this as using one standard time - UTC time.
 	// but for ease of understanding - I have coded it with current time instead of UTC. 
@@ -133,10 +152,11 @@ function TrainDisplay()
 	// var RightNow = moment.utc().format("HH:mm");
 	// var TStartTime = moment.utc(ttTime, "HH:mm").format("HH:mm");
 
-database.ref().on("child_added", function(childSnapshot) {
+database.ref('/train/').on("child_added", function(childSnapshot) {
 
 	var duration;
 	var MinsAway;	
+	var ArrivalDisplay = "";
 	var ttfrq = childSnapshot.val().tFrq ;
 	var ttStartTime = childSnapshot.val().tTime;		
 	var TStartTime = moment(ttStartTime, "HH:mm").format("HH:mm");
@@ -146,6 +166,9 @@ database.ref().on("child_added", function(childSnapshot) {
 	var ttnextArrival = TStartTime;
 	var mttnextArrival = new moment(TStartTime, "HH:mm");
 	var ttnextArrivalFull;
+	
+	console.log( childSnapshot.val());
+	//console.log(childSnapshot.val().ref);	
 	
 	//Logic: 
 	//Consider RightNow time in HH:mm & TrainTime as entered by user in HH:mm in 24 hour format
@@ -161,7 +184,7 @@ database.ref().on("child_added", function(childSnapshot) {
 	// 		Generic case: TrainTime has passed but add frequency to it until RightNow  < TrainArrival Time
 	//		minsAway = TrainArrivalTime - RightNow & NextArrival = (TrainTime + multiple necessary frequencies)
 							
-	$("#currentTime").text(RightNow);
+	$("#currentTime").text(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
 		
 	if (TStartTime >= RightNow)
 	{
@@ -179,15 +202,16 @@ database.ref().on("child_added", function(childSnapshot) {
 			MinsAway = 'No train today';
 			ttnextArrival = TStartTime;		
 	        ttnextArrival = mTStartTime.add(parseInt(ttfrq), 'm'); 	
-	        ttnextArrivalFull = ttnextArrival.format(); 		
+	        ttnextArrivalFull = ttnextArrival.format("HH:mm"); 		
 		}
 		else if (parseInt(ttfrq) > 1440 ) 
 		{
 			//Today's train has passed and the frequency is more than 24 hours, train is not within a day
 			MinsAway = 'No train today';
-			ttnextArrival = TStartTime;		
+			//ttnextArrival = TStartTime;		
 	        ttnextArrival = mTStartTime.add(parseInt(ttfrq), 'm'); 	
-	        ttnextArrivalFull = ttnextArrival.format(); 		
+			//var mtoday = moment().add(ttnextArrival.add(parseInt(ttfrq), 'm'),'minutes');
+	        ttnextArrivalFull = ttnextArrival.format("MMM DD, YYYY hh:mm a"); 		
 		}
 		else 
 		{
@@ -205,37 +229,62 @@ database.ref().on("child_added", function(childSnapshot) {
 		}
 	}
 
+	if (ttnextArrivalFull.length == 5)
+	{
+		ArrivalDisplay = moment(ttnextArrivalFull, "HH:mm").format("hh:mm A");		
+	}
+	else
+	{
+		ArrivalDisplay = moment(ttnextArrivalFull, "").format("MMM DD, YYYY hh:mm a");
+	}
+	
+	
+	
 	//add a button to delete a train set and then read key as primary key
-		
+	
 	var newRow = $(`
                 <tr>
                   <td >${childSnapshot.val().tName}</td>
                   <td >${childSnapshot.val().tDestination}</td>				 				 
                   <td >${childSnapshot.val().tFrq }</td>
-                  <td >${ttnextArrivalFull}</td>
-                  <td >${MinsAway}</td>
-				  <td ><button type="button" class="btn btn-default navbar-btn btnDeleteTrain" data=${childSnapshot.val().key}>Delete</button></td>				  
+                  <td >${ArrivalDisplay}</td>
+                  <td >${MinsAway}</td>					      						  
+				  <td ><button type="button" class="btn btn-default navbar-btn" id="btnDeleteTrain"  onclick="deleteRecord('${childSnapshot.key}');" >Delete</button></td>				  
 				</tr>	
-	`);
-	//console.log (newRow);
-	
-	
+	`);	
+		
   // full list of items to the table
   $("#ttBody").append(newRow);
 
-	
 }, function(errorObject) {
   console.log("Errors handled: " + errorObject.code);
 });
 
 }
 
-// on delete button 
- $("btnDeleteTrain").on("click", function(event) {
-database.ref().on("child_added", function(childSnapshot) {
-	alert ("delete pressed" + this.data.val());
-});
-});	 
+
+ function deleteRecord(key)
+ {     
+ console.log("key" + key);
+/*
+     var refDB = firebase.database().ref(key);
+	  refDB.child(key).remove()
+     //refDB.remove();
+     .then(function() {
+       console.log("Remove succeeded.")
+     })
+     .catch(function(error) {
+       console.log("Remove failed: " + error.message)
+     });  */
+	 
+	 firebase.database().ref('train').child(key).remove();
+    var row = $(this).parent().parent();
+    row.remove(); 
+	 window.location.reload(1);
+	//$('#ttBody tbody').empty();
+	//TrainDisplay();
+	 /* refDB.setValue(null); */
+} 
 
 
 $(document).ready(function () {
@@ -257,9 +306,22 @@ $(document).ready(function () {
  Timedropdown();
  TrainDisplay();
  
+
+
  setTimeout(function(){
    window.location.reload(1);
-}, 60000);
-  
+}, 60000); 
+
 });
 
+
+/*
+ setTimeout(function(){
+   refreshtable();
+}, 6000);  */
+
+/*
+function refreshtable()
+{
+	$('#trainBulletin').load(document.URL +  '#trainBulletin');
+} */
